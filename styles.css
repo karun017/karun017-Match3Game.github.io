@@ -1,0 +1,128 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f0f0f0;
+    flex-direction: column;
+}
+
+.container {
+    width: 90vw;
+    height: 90vw;
+    max-width: 750px;
+    max-height: 750px;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    gap: 8px;
+    padding: 24px;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+.item {
+    /* border: 1px solid #ee0612; */
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.3s;
+}
+
+.item::after {
+    content: attr(data-emoji);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4.5rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    white-space: nowrap;
+}
+
+/* Shadows for each emoji with more visible colors */
+.item[data-emoji="🍑"]::after {
+    text-shadow: 0 0 24px rgba(255, 105, 97, 0.9);
+}
+
+.item[data-emoji="🍌"]::after {
+    text-shadow: 0 0 24px rgba(255, 215, 0, 0.9);
+}
+
+.item[data-emoji="🥝"]::after {
+    text-shadow: 0 0 24px rgba(34, 139, 34, 0.9);
+}
+
+.item[data-emoji="🍇"]::after {
+    text-shadow: 0 0 24px rgba(75, 0, 130, 0.9);
+}
+
+.item[data-emoji="🍓"]::after {
+    text-shadow: 0 0 24px rgba(220, 20, 60, 0.9);
+}
+
+/* Keyframes for tilt-shaking animation */
+@keyframes tilt-shaking {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(10deg); }
+    50% { transform: rotate(0deg); }
+    75% { transform: rotate(-10deg); }
+    100% { transform: rotate(0deg); }
+}
+
+/* Apply shake animation on hover and active states */
+.item:hover, .item.shaking {
+    animation: tilt-shaking 0.3s infinite;
+}
+
+/* Keyframes for swap animation */
+@keyframes swap-animation {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Apply swap animation to items */
+.item.swap {
+    animation: swap-animation 0.5s;
+}
+
+/* Keyframes for falling with bouncing animation */
+@keyframes falling {
+    0% { transform: translateY(-100vh); }
+    70% { transform: translateY(0); }
+    80% { transform: translateY(-30px); }
+    90% { transform: translateY(10px); }
+    100% { transform: translateY(0); }
+}
+
+/* Apply falling animation to items */
+.item.falling {
+    animation: falling 1s ease-out;
+}
+
+/* Style for the button */
+#shuffle-button {
+    margin-bottom: 20px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#shuffle-button:hover {
+    background-color: #0056b3;
+}
+
