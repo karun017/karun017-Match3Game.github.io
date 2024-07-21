@@ -4,7 +4,7 @@ html, body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f0f0f0;
+    background-color: #000000; /* เปลี่ยนพื้นหลังเป็นสีดำ */
     flex-direction: column;
 }
 
@@ -19,7 +19,10 @@ html, body {
     gap: 8px;
     padding: 24px;
     box-sizing: border-box;
-    background-color: white;
+    background-color: #333;
+    border: 1px solid #d3e5f7;
+    box-shadow: 0 8px 16px rgba(76, 175, 80, 0.5); /* เพิ่มระยะของเงา */
+    border-radius: 15px; /* เพิ่มมุมโค้งที่นี่ */
 }
 
 .item {
