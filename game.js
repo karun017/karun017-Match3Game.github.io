@@ -1,11 +1,13 @@
+//ver.1
 document.addEventListener('DOMContentLoaded', () => {
-    const container = document.querySelector('.container');
+    const container = document.querySelector('.game-container'); // เปลี่ยนชื่อ class
     const button = document.getElementById('shuffle-button');
     const emojis = ["🍑", "🍌", "🥝", "🍇", "🍓"];
     let selectedItem = null;
     let selectedEmoji = null;
     let clickedItem = null;
     let clickedEmoji = null;
+    let isAnimating = false; // เพื่อป้องกันการคลิกระหว่างการลบอีโมจิ
 
     // ฟังก์ชันสร้างอีโมจิแบบสุ่ม
     function createRandomItem(row, col) {
@@ -126,57 +128,61 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // ฟังก์ชันจัดการเหตุการณ์คลิก
-   function handleClick(event) {
-    const clicked = event.currentTarget;
+    function handleClick(event) {
+        if (isAnimating) return; // หยุดการทำงานถ้ามีการลบอีโมจิอยู่
 
-    if (!selectedItem) {
-        // คลิกแรก, เลือกอีโมจิ
-        selectedItem = clicked;
-        selectedEmoji = selectedItem.dataset.emoji;
-        selectedItem.classList.add('shaking');
-    } else {
-        // คลิกที่สอง, ตรวจสอบว่าอยู่ติดกันในแนวนอนหรือแนวตั้งหรือไม่
-        clickedItem = clicked;
-        clickedEmoji = clickedItem.dataset.emoji;
+        const clicked = event.currentTarget;
 
-        const row1 = parseInt(selectedItem.dataset.row, 10);
-        const col1 = parseInt(selectedItem.dataset.col, 10);
-        const row2 = parseInt(clickedItem.dataset.row, 10);
-        const col2 = parseInt(clickedItem.dataset.col, 10);
-        
-        const isAdjacent = (
-            (row1 === row2 && Math.abs(col1 - col2) === 1) ||  // แนวนอน
-            (col1 === col2 && Math.abs(row1 - row2) === 1)    // แนวตั้ง
-        );
+        if (!selectedItem) {
+            // คลิกแรก, เลือกอีโมจิ
+            selectedItem = clicked;
+            selectedEmoji = selectedItem.dataset.emoji;
+            selectedItem.classList.add('shaking');
+        } else {
+            // คลิกที่สอง, ตรวจสอบว่าอยู่ติดกันในแนวนอนหรือแนวตั้งหรือไม่
+            clickedItem = clicked;
+            clickedEmoji = clickedItem.dataset.emoji;
 
-        if (isAdjacent) {
-            // สลับตำแหน่งอีโมจิชั่วคราว
-            selectedItem.dataset.emoji = clickedEmoji;
-            clickedItem.dataset.emoji = selectedEmoji;
+            const row1 = parseInt(selectedItem.dataset.row, 10);
+            const col1 = parseInt(selectedItem.dataset.col, 10);
+            const row2 = parseInt(clickedItem.dataset.row, 10);
+            const col2 = parseInt(clickedItem.dataset.col, 10);
+            
+            const isAdjacent = (
+                (row1 === row2 && Math.abs(col1 - col2) === 1) ||  // แนวนอน
+                (col1 === col2 && Math.abs(row1 - row2) === 1)    // แนวตั้ง
+            );
 
-            // แสดง animation การสลับตำแหน่ง
-            animateSwap(selectedItem, clickedItem);
+            if (isAdjacent) {
+                // สลับตำแหน่งอีโมจิชั่วคราว
+                selectedItem.dataset.emoji = clickedEmoji;
+                clickedItem.dataset.emoji = selectedEmoji;
 
-            // ตรวจสอบว่าเรียงกันสามตัวหรือไม่หลังจากสลับตำแหน่ง
-            setTimeout(() => {
-                if (checkForMatches()) {
-                    // ถ้ามีการเรียงกันสามตัว ลบอีโมจิที่ตรงกัน
-                    setTimeout(() => {
-                        dropDownItems();
-                    }, 500); // ตรงกับระยะเวลาของ animation การลบ
-                } else {
-                    // ถ้าไม่มีการเรียงกันสามตัว ให้เปลี่ยนตำแหน่งกลับที่เดิม
-                    selectedItem.dataset.emoji = selectedEmoji;
-                    clickedItem.dataset.emoji = clickedEmoji;
-                }
-            }, 500); // ตรงกับระยะเวลาของ animation การสลับตำแหน่ง
+                // แสดง animation การสลับตำแหน่ง
+                animateSwap(selectedItem, clickedItem);
+
+                // ตรวจสอบว่าเรียงกันสามตัวหรือไม่หลังจากสลับตำแหน่ง
+                setTimeout(() => {
+                    if (checkForMatches()) {
+                        // ถ้ามีการเรียงกันสามตัว ลบอีโมจิที่ตรงกัน
+                        isAnimating = true;
+                        setTimeout(() => {
+                            dropDownItems();
+                            isAnimating = false;
+                        }, 500); // ตรงกับระยะเวลาของ animation การลบ
+                    } else {
+                        // ถ้าไม่มีการเรียงกันสามตัว ให้เปลี่ยนตำแหน่งกลับที่เดิม
+                        const tempEmoji = selectedItem.dataset.emoji;
+                        selectedItem.dataset.emoji = clickedItem.dataset.emoji;
+                        clickedItem.dataset.emoji = tempEmoji;
+                    }
+                }, 500); // ตรงกับระยะเวลาของ animation การสลับตำแหน่ง
+            }
+
+            // รีเซ็ตการเลือก
+            stopShaking();
         }
-
-        // รีเซ็ตการเลือก
-        stopShaking();
     }
-}
-
 
     // เพิ่ม event listener คลิกให้กับแต่ละ item
     function addEventListenersToItems() {
