@@ -1,29 +1,64 @@
-html, body {
-    height: 100%;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #000000; /* เปลี่ยนพื้นหลังเป็นสีดำ */
-    flex-direction: column;
+body, html {
+    height: 100%; /* ให้ body และ html เต็มความสูงของ viewport */
+    margin: 0; /* ลบ margin เริ่มต้น */
+    background-color: #000000;
 }
 
-.container {
-    width: 90vw;
-    height: 90vw;
-    max-width: 750px;
-    max-height: 750px;
+/* ใช้ Flexbox เพื่อจัดการ layout ของ wrapper */
+.wrapper {
+    display: flex;
+    height: 100vh; /* ใช้ความสูงเต็มของ viewport */
+    width: 100vw; /* ใช้ความกว้างเต็มของ viewport */
+}
+
+
+.game-container {
+    background-color: #333;
+    border: 1px solid #00ff62;
+    box-shadow: 0 8px 16px rgba(3, 240, 11, 0.856);
+    border-radius: 16px;
     display: grid;
     grid-template-columns: repeat(8, 1fr);
     grid-template-rows: repeat(8, 1fr);
     gap: 8px;
     padding: 24px;
     box-sizing: border-box;
-    background-color: #333;
-    border: 1px solid #d3e5f7;
-    box-shadow: 0 8px 16px rgba(76, 175, 80, 0.5); /* เพิ่มระยะของเงา */
-    border-radius: 15px; /* เพิ่มมุมโค้งที่นี่ */
+    max-width: 600px;
+    width: 100%;
+    max-height: 600px; /* ความสูงสูงสุด */
+    height: 100%; /* ปรับตามขนาดของ container */
+    overflow: auto; /* เพิ่ม scrollbars หากจำเป็น */
+    align-self: center; /* จัดให้อยู่กลางในแนวตั้ง */
 }
+
+.player1 {
+    flex: 1; /* ให้ div player มีขนาดกว้างเท่ากัน */
+    min-width: 0; /* ป้องกันการขยายขนาดมากเกินไป */
+    background-color: #000000; /* สีพื้นหลังสำหรับ player */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    margin: 8px;
+    border: 1px solid blue;
+    border-radius: 16px;
+    box-shadow: 0 8px 16px rgba(0, 26, 255, 0.979);
+}
+
+.player2 {
+    flex: 1; /* ให้ div player มีขนาดกว้างเท่ากัน */
+    min-width: 0; /* ป้องกันการขยายขนาดมากเกินไป */
+    background-color: #000000; /* สีพื้นหลังสำหรับ player */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    margin: 8px;
+    border: 1px solid red;
+    border-radius: 16px;
+    box-shadow: 0 8px 16px rgba(245, 1, 1, 0.877);
+}
+
 
 .item {
     /* border: 1px solid #ee0612; */
@@ -43,7 +78,7 @@ html, body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    font-size: 2rem;
+    font-size: 2.5rem;
     display: flex;
     justify-content: center;
     align-items: center;
